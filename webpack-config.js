@@ -1,24 +1,33 @@
+var {resolve} = require('path');
 var Clean = require('clean-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
 	entry: {
-		main: './index.js'
+		main: resolve('./index.js'),
 	},
 	output: {
-		path: './dist',
+		path: resolve('./dist'),
 		filename: 'app.[hash].js'
 	},
 	module: {
-		loaders: [
+		rules: [
 			{
 				test: /\.css$/,
-				loader: ExtractTextPlugin.extract("style-loader", "css-loader")
+				loader: ExtractTextPlugin.extract({
+					fallback: "style-loader",
+					use: {
+						loader: "css-loader",
+						options: {
+							minimize: false,
+						},
+					},
+				})
 			},
 			{
 				test: /\.(jpg|png)$/,
-				loader: 'file'
+				loader: 'file-loader'
 			},
 		]
 	},
